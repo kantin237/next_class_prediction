@@ -33,7 +33,7 @@ predict =  model.predict(df_predict)
 result['status'] = predict
 result['status'] = result.status.apply(lambda x: 'admis' if x  == 1 else 'echec')
 result = result.drop(columns=["G_Math", "G_Por"])
-result_admis = result
+result_admis = result[result.status == 'admis']
 
 
 app = Flask(__name__)
@@ -71,7 +71,7 @@ def index():
     graphJSON_sex = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
     #List of  Mjob and Fjob who have job
-    result_of_parent_who_have_job = result[(result_admis.Mjob != 'at_home') & (result_admis.Fjob != 'at_home')]
+    result_of_parent_who_have_job = result_admis[(result_admis.Mjob != 'at_home') & (result_admis.Fjob != 'at_home')]
     
     parent_who_have_job_grouped_ser = result_of_parent_who_have_job.groupby(['Mjob'])['alc'].count()
     job_grouped_df = parent_who_have_job_grouped_ser.reset_index()
@@ -102,7 +102,7 @@ def index():
     graphJSON_Fjob = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
     #List of  Mjob and Fjob who don't have job
-    result_of_parent_who_dont_have_job = result[(result_admis.Mjob == 'at_home') & (result_admis.Fjob == 'at_home')]
+    result_of_parent_who_dont_have_job = result_admis[(result_admis.Mjob == 'at_home') & (result_admis.Fjob == 'at_home')]
     parent_who_dont_have_job_grouped_ser = result_of_parent_who_dont_have_job.groupby(['Mjob'])['alc'].count()
     dont_have_job_grouped_df = parent_who_dont_have_job_grouped_ser.reset_index()
 
