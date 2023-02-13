@@ -1,0 +1,10 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="container-fluid">
+  <h3>Tableau des étudiants de moins de 17 ans</h3>
+  {% if results %} {% for result in results %} {{ result | safe }} {% endfor %}
+  {% else %}
+  <p>Pas de results</p>
+  {% endif %}
+</div>
+{% endblock content %}
